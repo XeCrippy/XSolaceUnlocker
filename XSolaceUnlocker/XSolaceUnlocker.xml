@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<xex>
+  <baseaddr addr="0x91E00000"/>
+  <!--Load address can be changed if it conflicts with plugins-->
+  <sysdll/>
+  <format>
+    <compressed/>
+  </format>
+  <mediatypes>
+    <default/>
+    <allpackages/>
+  </mediatypes>
+  <gameregion>
+    <all/>
+  </gameregion>
+</xex>
