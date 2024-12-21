@@ -9,4 +9,4 @@
 
 Credits:
 * Clement Dreptin for the xam and memory functions https://github.com/ClementDreptin/XexUtils
-* silent06 for pointing me in the right direction and take another look at XUserWriteAchievements https://github.com/XeCrippy/AchievementUnlockerV3/issues/1
+* silent06 for pointing me in the right direction and making me take another look at XUserWriteAchievements https://github.com/XeCrippy/AchievementUnlockerV3/issues/1
