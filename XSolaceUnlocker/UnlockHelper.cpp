@@ -40,15 +40,15 @@ namespace AchievementUnlocker {
 	}
 
 	void achievementUnlocker::UnlockAchievements() {
-		const uint32_t numAchievements = 250;
+		const uint32_t numAchievements = 250; // this value can be experimented with 
 		XUSER_ACHIEVEMENT achievements[numAchievements] = {};
 
 		for (uint32_t i = 0; i < numAchievements; ++i) {
-			achievements[i].dwAchievementId = GetAchievementIdForIndex(i);
+			achievements[i].dwAchievementId = GetAchievementIdForIndex(i); // creates array of XUSER_ACHIEVEMENTS, increasing the dwAchievementId each iteration so {1,2,3,4......250}
 		}
 
-		XOVERLAPPED overlapped = {};
-		PXOVERLAPPED pOverlapped = nullptr;
+		//XOVERLAPPED overlapped = {}; // for asynchronous operation
+		PXOVERLAPPED pOverlapped = nullptr; // use &overlapped for asynchronous operation 
 
 		uint32_t result = XUserWriteAchievements(numAchievements, achievements, pOverlapped);
 
