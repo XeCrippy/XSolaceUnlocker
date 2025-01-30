@@ -11,11 +11,17 @@ namespace AchievementUnlocker {
 		std::wstring welcome;
 		welcome += L"Instructions:";
 		welcome += newLine;
+		welcome += L"Sign into the account you want to use";
+		welcome += newLine;
 		welcome += L"Load the game you want and press :";
 		welcome += newLine;
 		welcome += L"Unlock Achievements : Dpad_Left+X";
 		welcome += newLine;
+		welcome += L"Unlock Single Achievement : Dpad_Left+B";
+		welcome += newLine;
 		welcome += L"Unlock Avatar Awards : Dpad_Left+Y";
+		welcome += newLine + newLine;
+		welcome += L"Reboot : LB+RB+A";
 		welcome += newLine + newLine;
 		welcome += L"Made by XeCrippy";
 		return welcome.c_str();
@@ -31,63 +37,97 @@ namespace AchievementUnlocker {
 		);
 	}
 
-	uint32_t achievementUnlocker::GetAchievementIdForIndex(uint32_t index) {
+	uint32_t achievementUnlocker::GetIdForIndex(uint32_t index) {
 		return index + 1;
 	}
 
-	uint32_t achievementUnlocker::GetAwardIdForIndex(uint32_t index) {
-		return index + 1;
+	void UnlockSingleAchievement() {
+		XINPUT_STATE state = {};
+		const uint32_t numAchievements = 1;
+		XUSER_ACHIEVEMENT achievements[numAchievements] = {};
+
+		unsigned long hr = 0;
+		HRESULT hre = 0;
+		wchar_t r1[512];
+		XOVERLAPPED overlapped = {};
+		PXOVERLAPPED pOverlapped = &overlapped;
+
+		ZeroMemory(&state, sizeof(XINPUT_STATE));
+
+		XInputGetState(0, &state);
+
+		hre = XShowKeyboardUI(0, VKBD_DEFAULT, L"", L"Individual Achievement Unlocker", L"Enter achievement Id", r1, 512, pOverlapped);
+
+		while (!XHasOverlappedIoCompleted(pOverlapped)) Sleep(30);
+
+		if (hre == ERROR_IO_PENDING)  hr = _wtoi(r1); 
+
+		achievements->dwUserIndex = 0;
+		achievements->dwAchievementId = (DWORD)hr;
+
+		XUserWriteAchievements(numAchievements, achievements, pOverlapped);
+
+		while (!XHasOverlappedIoCompleted(pOverlapped)) Sleep(30);
+
+		uint32_t overlappedResult = XGetOverlappedResult(pOverlapped, nullptr, TRUE);
+		if (!overlappedResult == ERROR_SUCCESS)
+			Utilities::Xam::XNotify("Failed to unlock achievements!");
 	}
 
 	void achievementUnlocker::UnlockAchievements() {
-		const uint32_t numAchievements = 250;
+		const uint32_t numAchievements = 200;
 		XUSER_ACHIEVEMENT achievements[numAchievements] = {};
 
 		for (uint32_t i = 0; i < numAchievements; ++i) {
-			achievements[i].dwAchievementId = GetAchievementIdForIndex(i);
+			achievements[i].dwUserIndex = 0;
+			achievements[i].dwAchievementId = GetIdForIndex(i);
 		}
 
 		XOVERLAPPED overlapped = {};
-		PXOVERLAPPED pOverlapped = nullptr;
+		PXOVERLAPPED pOverlapped = &overlapped;
 
-		uint32_t result = XUserWriteAchievements(numAchievements, achievements, pOverlapped);
+		XUserWriteAchievements(numAchievements, achievements, pOverlapped);
 
-		if (result != ERROR_SUCCESS) {
-			Utilities::Xam::XNotify("Failed to unlock achievements");
-		}
+		while (!XHasOverlappedIoCompleted(pOverlapped))
+			Sleep(30);
+
+		uint32_t overlappedResult = XGetOverlappedResult(pOverlapped, nullptr, TRUE);
+		if (!overlappedResult == ERROR_SUCCESS)
+			Utilities::Xam::XNotify("Failed to unlock achievements!");
 	}
 
 	void achievementUnlocker::UnlockAvatarAwards() {
-		const uint32_t numAwards = 50;
+		const uint32_t numAwards = 30;
 		XUSER_AVATARASSET avatarAwards[numAwards] = {};
 
 		for (uint32_t i = 0; i < numAwards; ++i) {
-			avatarAwards[i].dwAwardId = GetAwardIdForIndex(i);
+			avatarAwards[i].dwAwardId = GetIdForIndex(i);
 		}
 
-		XOVERLAPPED overlapped = {};
-		PXOVERLAPPED pOverlapped = nullptr;
+		XOVERLAPPED overlapped = {}; 
+		PXOVERLAPPED pOverlapped = &overlapped; 
 
-		uint32_t result = XUserAwardAvatarAssets(numAwards, avatarAwards, pOverlapped);
+		XUserAwardAvatarAssets(numAwards, avatarAwards, pOverlapped);
 
-		if (result != ERROR_SUCCESS) {
-			Utilities::Xam::XNotify("Failed to unlock avatar awards. Check if the game has any");
-		}
+		uint32_t overlappedResult = XGetOverlappedResult(pOverlapped, nullptr, TRUE);
+		if (!overlappedResult == ERROR_SUCCESS)
+			Utilities::Xam::XNotify("Failed to unlock achievements!");
 	}
 
 	void achievementUnlocker::LoadPlugin() {
 		XINPUT_STATE state = { 0 };
 		ZeroMemory(&state, sizeof(state));
-
+		
 		ShowWelcomeMsg();
 
 		while (true) {
 
 			bool hasToggled = false;
+			uint32_t tid = Utilities::Xam::GetCurrentTitleId();
 
 			if (XInputGetState(0, &state) == ERROR_SUCCESS) {
 
-				if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT && state.Gamepad.wButtons & XINPUT_GAMEPAD_X) {
+				if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT && state.Gamepad.wButtons & XINPUT_GAMEPAD_X && tid != Utilities::DASHBOARD) {
 					Utilities::Xam::PulseController();
 					UnlockAchievements();
 					hasToggled = true;
@@ -95,6 +135,15 @@ namespace AchievementUnlocker {
 				if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT && state.Gamepad.wButtons & XINPUT_GAMEPAD_Y) {
 					Utilities::Xam::PulseController();
 					UnlockAvatarAwards();
+					hasToggled = true;
+				}
+				if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT && state.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
+					Utilities::Xam::PulseController();
+					UnlockSingleAchievement();
+					hasToggled = true;
+				}
+				if (state.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER && state.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER && state.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
+					Utilities::Xam::Reboot();
 					hasToggled = true;
 				}
 			}

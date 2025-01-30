@@ -84,10 +84,12 @@ namespace Utilities {
 
 	class Xam {
     public:
+        uint32_t ShowKeyboard(const wchar_t* title, const wchar_t* description, const wchar_t* defaultText, std::string& result, size_t maxLength, uint32_t keyboardType);
         static uint32_t ShowMessageBox(const wchar_t* title, const wchar_t* text, const wchar_t** buttonLabels, size_t numberOfButtons, uint32_t* pButtonPressedIndex = nullptr, uint32_t messageBoxType = XMB_ALERTICON, uint32_t focusedButtonIndex = 0);
         static uint32_t GetCurrentTitleId();
 
         static void PulseController();
-		static void XNotify(const std::string& text, XNOTIFYQUEUEUI_TYPE type = XNOTIFYUI_TYPE_PREFERRED_REVIEW);
+        static void Reboot();
+		static void XNotify(const std::string& text, XNOTIFYQUEUEUI_TYPE type = XNOTIFYUI_TYPE_COMPLAINT);
 	};
 }
