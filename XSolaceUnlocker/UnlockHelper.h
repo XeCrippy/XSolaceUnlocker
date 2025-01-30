@@ -7,6 +7,7 @@ namespace AchievementUnlocker {
 		static void LoadPlugin();
 	private:
 		static uint32_t GetIdForIndex(uint32_t index);
+		static void UnlockSingleAchievement();
 		static void UnlockAchievements();
 		static void UnlockAvatarAwards();
 	};
