@@ -86,7 +86,6 @@ namespace AchievementUnlocker {
 		XOVERLAPPED overlapped = {};
 		PXOVERLAPPED pOverlapped = &overlapped;
 
-
 		XUserWriteAchievements(numAchievements, achievements, pOverlapped);
 
 		while (!XHasOverlappedIoCompleted(pOverlapped))
