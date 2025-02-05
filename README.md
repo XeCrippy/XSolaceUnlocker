@@ -7,7 +7,7 @@
 * Press Dpad_Left+Y to unlock avatar awards
 * A lot of games don't have avatar awards. Usually if it fails that is why but it doesn't make it crash.
 
- <blockquote class="imgur-embed-pub" lang="en" data-id="m23pxDc"><a href="https://imgur.com/m23pxDc">View post on imgur.com</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+<img src="https://i.imgur.com/m23pxDc.jpeg" class="img-fluid" alt="Responsive Image">
 
 Credits:
 * Clement Dreptin for the xam and memory functions https://github.com/ClementDreptin/XexUtils
