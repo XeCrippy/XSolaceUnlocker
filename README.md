@@ -1,5 +1,7 @@
 # XSolace Achievement & Avatar Award Unlocker for Xbox 360 RGH/JTAG consoles 
 
+# I forgot to update the GitHub source to include the gamer pic unlocker but it's in the latest xex release 
+
 * Set as a dashlaunch plugin (or jrpc.ini)
 * Sign into the account you want to use 
 * Load the game you want to unlock achievements or avatar awards for
