@@ -129,10 +129,6 @@ namespace AchievementUnlocker {
 			result = XUserAwardGamerPicture(userIndex, i, 0, pOverlapped);
 			while (!XHasOverlappedIoCompleted(pOverlapped)) Sleep(10);
 		}
-
-		uint32_t overlappedResult = XGetOverlappedResult(pOverlapped, nullptr, TRUE);
-		if (overlappedResult != ERROR_SUCCESS)
-			Utilities::Xam::XNotify("Failed to unlock gamer pics. Check if the game has them!");
 	}
 
 	void achievementUnlocker::LoadPlugin() {
