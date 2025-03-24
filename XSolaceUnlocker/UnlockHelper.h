@@ -10,5 +10,6 @@ namespace AchievementUnlocker {
 		static void UnlockSingleAchievement();
 		static void UnlockAchievements();
 		static void UnlockAvatarAwards();
+		static void UnlockGamerPics();
 	};
 }

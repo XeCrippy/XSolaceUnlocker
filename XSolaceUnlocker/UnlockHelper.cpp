@@ -20,6 +20,8 @@ namespace AchievementUnlocker {
 		welcome += L"Unlock Single Achievement : Dpad_Left+B";
 		welcome += newLine;
 		welcome += L"Unlock Avatar Awards : Dpad_Left+Y";
+		welcome += newLine;
+		welcome += L"Unlock Gamer Pics : Dpad_Left+A";
 		welcome += newLine + newLine;
 		welcome += L"Reboot : LB+RB+A";
 		welcome += newLine + newLine;
@@ -41,7 +43,7 @@ namespace AchievementUnlocker {
 		return index + 1;
 	}
 
-	void UnlockSingleAchievement() {
+	void achievementUnlocker::UnlockSingleAchievement() {
 		XINPUT_STATE state = {};
 		const uint32_t numAchievements = 1;
 		XUSER_ACHIEVEMENT achievements[numAchievements] = {};
@@ -70,12 +72,12 @@ namespace AchievementUnlocker {
 		while (!XHasOverlappedIoCompleted(pOverlapped)) Sleep(30);
 
 		uint32_t overlappedResult = XGetOverlappedResult(pOverlapped, nullptr, TRUE);
-		if (!overlappedResult == ERROR_SUCCESS)
+		if (overlappedResult != ERROR_SUCCESS)
 			Utilities::Xam::XNotify("Failed to unlock achievements!");
 	}
 
 	void achievementUnlocker::UnlockAchievements() {
-		const uint32_t numAchievements = 200;
+		const uint32_t numAchievements = 500;
 		XUSER_ACHIEVEMENT achievements[numAchievements] = {};
 
 		for (uint32_t i = 0; i < numAchievements; ++i) {
@@ -92,7 +94,7 @@ namespace AchievementUnlocker {
 			Sleep(30);
 
 		uint32_t overlappedResult = XGetOverlappedResult(pOverlapped, nullptr, TRUE);
-		if (!overlappedResult == ERROR_SUCCESS)
+		if (overlappedResult != ERROR_SUCCESS)
 			Utilities::Xam::XNotify("Failed to unlock achievements!");
 	}
 
@@ -110,8 +112,27 @@ namespace AchievementUnlocker {
 		XUserAwardAvatarAssets(numAwards, avatarAwards, pOverlapped);
 
 		uint32_t overlappedResult = XGetOverlappedResult(pOverlapped, nullptr, TRUE);
-		if (!overlappedResult == ERROR_SUCCESS)
-			Utilities::Xam::XNotify("Failed to unlock achievements!");
+		if (overlappedResult != ERROR_SUCCESS)
+			Utilities::Xam::XNotify("Failed to unlock avatar awards. Check if the game has them!");
+	}
+
+	void achievementUnlocker::UnlockGamerPics() {
+		uint32_t userIndex = 0;
+		const uint32_t numPics = 50;
+		uint32_t gamerPicId = 1;
+		uint32_t result = 0;
+
+		XOVERLAPPED overlapped = {};
+		PXOVERLAPPED pOverlapped = &overlapped;
+
+		for (uint32_t i = 0; i < numPics; ++i) {
+			result = XUserAwardGamerPicture(userIndex, i, 0, pOverlapped);
+			while (!XHasOverlappedIoCompleted(pOverlapped)) Sleep(10);
+		}
+
+		uint32_t overlappedResult = XGetOverlappedResult(pOverlapped, nullptr, TRUE);
+		if (overlappedResult != ERROR_SUCCESS)
+			Utilities::Xam::XNotify("Failed to unlock gamer pics. Check if the game has them!");
 	}
 
 	void achievementUnlocker::LoadPlugin() {
@@ -140,6 +161,11 @@ namespace AchievementUnlocker {
 				if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT && state.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
 					Utilities::Xam::PulseController();
 					UnlockSingleAchievement();
+					hasToggled = true;
+				}
+				if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT && state.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
+					Utilities::Xam::PulseController();
+					UnlockGamerPics();
 					hasToggled = true;
 				}
 				if (state.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER && state.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER && state.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
