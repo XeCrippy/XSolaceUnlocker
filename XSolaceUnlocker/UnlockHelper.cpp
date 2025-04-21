@@ -111,6 +111,9 @@ namespace AchievementUnlocker {
 
 		XUserAwardAvatarAssets(numAwards, avatarAwards, pOverlapped);
 
+		while (!XHasOverlappedIoCompleted(pOverlapped))
+			Sleep(30);
+
 		uint32_t overlappedResult = XGetOverlappedResult(pOverlapped, nullptr, TRUE);
 		if (overlappedResult != ERROR_SUCCESS)
 			Utilities::Xam::XNotify("Failed to unlock avatar awards. Check if the game has them!");
@@ -118,7 +121,7 @@ namespace AchievementUnlocker {
 
 	void achievementUnlocker::UnlockGamerPics() {
 		uint32_t userIndex = 0;
-		const uint32_t numPics = 50;
+		const uint32_t numPics = 15;
 		uint32_t gamerPicId = 1;
 		uint32_t result = 0;
 
