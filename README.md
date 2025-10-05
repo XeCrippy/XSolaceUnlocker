@@ -7,6 +7,9 @@
 * Press Dpad_Left+Y to unlock avatar awards
 * A lot of games don't have avatar awards. Usually if it fails that is why but it doesn't make it crash.
 
+# Note:
+This plugin does not retrieve the achievementId's so to use the individual achievement unlocker you need to obtain the Ids yourself. Or check out Retro360 below. Its not something i can really do for the plugin because of lack of a UI. 
+
 <img src="https://i.imgur.com/m23pxDc.jpeg" class="img-fluid" alt="Responsive Image">
 
 Credits:
