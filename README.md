@@ -1,4 +1,4 @@
-# XSolace Achievement & Avatar Award Unlocker for Xbox 360 RGH/JTAG consoles 
+# XSolace Achievement, Avatar Award, and Gamer Pic Unlocker + Leaderboard Patcher for Xbox 360 RGH/JTAG consoles 
 
 * Set as a dashlaunch plugin (or jrpc.ini)
 * Sign into the account you want to use 
